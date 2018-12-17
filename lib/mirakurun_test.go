@@ -3,14 +3,11 @@ package mpmirakurun
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"strings"
 	"testing"
-
-	"github.com/gorilla/mux"
 )
 
 var statusServer *httptest.Server
