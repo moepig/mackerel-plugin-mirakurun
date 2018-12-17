@@ -132,7 +132,7 @@ func TestFetchMetrics(t *testing.T) {
 func TestFetchMetricsFail(t *testing.T) {
 	p := MirakurunPlugin{
 		Target: strings.Replace(statusServer.URL, "http://", "", 1),
-		Prefix: "redash",
+		Prefix: "mirakurun",
 	}
 
 	// return error against an invalid stats json
