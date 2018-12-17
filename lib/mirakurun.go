@@ -20,6 +20,7 @@ type Status struct {
 	Process     *Process     `json:"process"`
 	Epg         *Epg         `json:"epg"`
 	StreamCount *StreamCount `json:"streamCount"`
+	ErrorCount  *ErrorCount  `json:"ErrorCount"`
 }
 
 type Process struct {
@@ -41,6 +42,12 @@ type StreamCount struct {
 	TunerDevice *int `json:"tunerDevice"`
 	TsFilter    *int `json:"tsFilter"`
 	Decoder     *int `json:"decoder"`
+}
+
+type ErrorCount struct {
+	UncaughtException  *int `json:"uncaughtException"`
+	BufferOverflow     *int `json:"bufferOverflow"`
+	TunerDeviceRespawn *int `json:"tunerDeviceRespawn"`
 }
 
 var graphdef = map[string]mp.Graphs{
@@ -67,6 +74,15 @@ var graphdef = map[string]mp.Graphs{
 			{Name: "decoder", Label: "Decoder Count", Diff: false},
 			{Name: "tsFilter", Label: "TS Filter Count", Diff: false},
 			{Name: "tunerDevice", Label: "Tuner Device Count", Diff: false},
+		},
+	},
+	"errorCount": mp.Graphs{
+		Label: "Mirakurun Error",
+		Unit:  "integer",
+		Metrics: []mp.Metrics{
+			{Name: "uncaughtException", Label: "Uncaught Exception", Diff: true},
+			{Name: "bufferOverflow", Label: "Buffer Overflow", Diff: true},
+			{Name: "tunerDeviceRespawn", Label: "Tuner Device Respawn", Diff: true},
 		},
 	},
 }
@@ -112,6 +128,12 @@ func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
 		stat["tunerDevice"] = float64(*status.StreamCount.TunerDevice)
 		stat["tsFilter"] = float64(*status.StreamCount.TsFilter)
 		stat["decoder"] = float64(*status.StreamCount.Decoder)
+	}
+
+	if status.ErrorCount != nil {
+		stat["uncaughtException"] = float64(*status.ErrorCount.UncaughtException)
+		stat["bufferOverflow"] = float64(*status.ErrorCount.BufferOverflow)
+		stat["tunerDeviceRespawn"] = float64(*status.ErrorCount.TunerDeviceRespawn)
 	}
 
 	return stat, nil
