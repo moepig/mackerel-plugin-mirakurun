@@ -1,4 +1,4 @@
-# mackerel-plugin-mirakurun
+mackerel-plugin-mirakurun
 =======================
 
 mirakurun custom metrics plugin for mackerel.io agent.
