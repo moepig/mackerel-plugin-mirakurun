@@ -26,6 +26,13 @@ type Process struct {
 	MemoryUsage *MemoryUsage `json:"memoryUsage"`
 }
 
+type MemoryUsage struct {
+	Rss       *int `json:"rss"`
+	HeapTotal *int `json:"heapTotal"`
+	HeapUsed  *int `json:"heapUsed"`
+	External  *int `json:"external"`
+}
+
 type Epg struct {
 	StoredEvents *int `json:"storedEvents"`
 }
@@ -34,13 +41,6 @@ type StreamCount struct {
 	TunerDevice *int `json:"tunerDevice"`
 	TsFilter    *int `json:"tsFilter"`
 	Decoder     *int `json:"decoder"`
-}
-
-type MemoryUsage struct {
-	Rss       *int `json:"rss"`
-	HeapTotal *int `json:"heapTotal"`
-	HeapUsed  *int `json:"heapUsed"`
-	External  *int `json:"external"`
 }
 
 var graphdef = map[string]mp.Graphs{
