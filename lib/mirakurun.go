@@ -1,18 +1,19 @@
 package mpmirakurun
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"net/http"
 
 	mp "github.com/mackerelio/go-mackerel-plugin"
 )
 
-var graphdef = map[string]mp.Graphs{
-
+type MirakurunPlugin struct {
+	Prefix   string
+	Target   string
+	Tempfile string
 }
+
+var graphdef = map[string]mp.Graphs{}
 
 // FetchMetrics interface for mackerelplugin
 func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
@@ -36,8 +37,8 @@ func (m MirakurunPlugin) MetricKeyPrefix() string {
 
 func Do() {
 	optPrefix := flag.String("metric-key-prefix", "mirakurun", "Metric key prefix")
-	optHost := flag.String("host", "", "mirakurun-wui hostname")
-	optPort := flag.String("port", "", "mirakurun-wui port")
+	optHost := flag.String("host", "", "mirakurun hostname")
+	optPort := flag.String("port", "", "mirakurun port")
 	optTempfile := flag.String("tempfile", "", "Temp file name")
 	flag.Parse()
 
