@@ -81,8 +81,8 @@ func TestGraphDefinition(t *testing.T) {
 
 	graphdef := mirakurun.GraphDefinition()
 
-	if len(graphdef) != 4 {
-		t.Errorf("Graph Length: %d should be 4", len(graphdef))
+	if len(graphdef) != 5 {
+		t.Errorf("Graph Length: %d should be 5", len(graphdef))
 	}
 }
 
@@ -128,6 +128,9 @@ func TestFetchMetrics(t *testing.T) {
 		"uncaughtException":  1,
 		"bufferOverflow":     0,
 		"tunerDeviceRespawn": 18985,
+		"m1":                 806.59415,
+		"m5":                 662.05513,
+		"m15":                586.0672522222222,
 	}
 
 	for k, v := range expected {

@@ -17,10 +17,11 @@ type MirakurunPlugin struct {
 }
 
 type Status struct {
-	Process     *Process     `json:"process"`
-	Epg         *Epg         `json:"epg"`
-	StreamCount *StreamCount `json:"streamCount"`
-	ErrorCount  *ErrorCount  `json:"ErrorCount"`
+	Process       *Process       `json:"process"`
+	Epg           *Epg           `json:"epg"`
+	StreamCount   *StreamCount   `json:"streamCount"`
+	ErrorCount    *ErrorCount    `json:"ErrorCount"`
+	TimerAccuracy *TimerAccuracy `json:"timerAccuracy"`
 }
 
 type Process struct {
@@ -48,6 +49,24 @@ type ErrorCount struct {
 	UncaughtException  *int `json:"uncaughtException"`
 	BufferOverflow     *int `json:"bufferOverflow"`
 	TunerDeviceRespawn *int `json:"tunerDeviceRespawn"`
+}
+
+type TimerAccuracy struct {
+	M1 struct {
+		Avg *float64 `json:"avg"`
+		Min *float64 `json:"min"`
+		Max *float64 `json:"max"`
+	} `json:"m1"`
+	M5 struct {
+		Avg *float64 `json:"avg"`
+		Min *float64 `json:"min"`
+		Max *float64 `json:"max"`
+	} `json:"m5"`
+	M15 struct {
+		Avg *float64 `json:"avg"`
+		Min *float64 `json:"min"`
+		Max *float64 `json:"max"`
+	} `json:"m15"`
 }
 
 var graphdef = map[string]mp.Graphs{
@@ -83,6 +102,15 @@ var graphdef = map[string]mp.Graphs{
 			{Name: "uncaughtException", Label: "Uncaught Exception", Diff: true},
 			{Name: "bufferOverflow", Label: "Buffer Overflow", Diff: true},
 			{Name: "tunerDeviceRespawn", Label: "Tuner Device Respawn", Diff: true},
+		},
+	},
+	"timerAccuracy": mp.Graphs{
+		Label: "Mirakurun Timer Accuracy (msec)",
+		Unit:  "float",
+		Metrics: []mp.Metrics{
+			{Name: "m1", Label: "average 1min", Diff: false},
+			{Name: "m5", Label: "average 5min", Diff: false},
+			{Name: "m15", Label: "average 15min", Diff: false},
 		},
 	},
 }
@@ -134,6 +162,12 @@ func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
 		stat["uncaughtException"] = float64(*status.ErrorCount.UncaughtException)
 		stat["bufferOverflow"] = float64(*status.ErrorCount.BufferOverflow)
 		stat["tunerDeviceRespawn"] = float64(*status.ErrorCount.TunerDeviceRespawn)
+	}
+
+	if status.TimerAccuracy != nil {
+		stat["m1"] = float64(*status.TimerAccuracy.M1.Avg)
+		stat["m5"] = float64(*status.TimerAccuracy.M5.Avg)
+		stat["m15"] = float64(*status.TimerAccuracy.M15.Avg)
 	}
 
 	return stat, nil
