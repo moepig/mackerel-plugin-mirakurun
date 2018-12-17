@@ -17,8 +17,9 @@ type MirakurunPlugin struct {
 }
 
 type Status struct {
-	Process *Process `json:"process"`
-	Epg     *Epg     `json:"epg"`
+	Process     *Process     `json:"process"`
+	Epg         *Epg         `json:"epg"`
+	StreamCount *StreamCount `json:"streamCount"`
 }
 
 type Process struct {
@@ -27,6 +28,12 @@ type Process struct {
 
 type Epg struct {
 	StoredEvents *int `json:"storedEvents"`
+}
+
+type StreamCount struct {
+	TunerDevice *int `json:"tunerDevice"`
+	TsFilter    *int `json:"tsFilter"`
+	Decoder     *int `json:"decoder"`
 }
 
 type MemoryUsage struct {
@@ -51,6 +58,15 @@ var graphdef = map[string]mp.Graphs{
 		Unit:  "integer",
 		Metrics: []mp.Metrics{
 			{Name: "storedEvents", Label: "Stored Events", Diff: false},
+		},
+	},
+	"streamCount": mp.Graphs{
+		Label: "Mirakurun Stream",
+		Unit:  "integer",
+		Metrics: []mp.Metrics{
+			{Name: "decoder", Label: "Decoder Count", Diff: false},
+			{Name: "tsFilter", Label: "TS Filter Count", Diff: false},
+			{Name: "tunerDevice", Label: "Tuner Device Count", Diff: false},
 		},
 	},
 }
@@ -90,6 +106,12 @@ func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
 
 	if status.Epg != nil {
 		stat["storedEvents"] = float64(*status.Epg.StoredEvents)
+	}
+
+	if status.StreamCount != nil {
+		stat["tunerDevice"] = float64(*status.StreamCount.TunerDevice)
+		stat["tsFilter"] = float64(*status.StreamCount.TsFilter)
+		stat["decoder"] = float64(*status.StreamCount.Decoder)
 	}
 
 	return stat, nil
