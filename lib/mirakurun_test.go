@@ -80,6 +80,10 @@ func TestGraphDefinition(t *testing.T) {
 	var mirakurun MirakurunPlugin
 
 	graphdef := mirakurun.GraphDefinition()
+
+	if len(graphdef) != 1 {
+		t.Errorf("Graph Length: %d should be 6", len(graphdef))
+	}
 }
 
 func TestMain(m *testing.M) {
@@ -112,9 +116,11 @@ func TestFetchMetrics(t *testing.T) {
 		return
 	}
 
-	// check the metrics1
+	// check metrics
 	expected := map[string]float64{
-
+		"rss":       171012096,
+		"heapTotal": 84508672,
+		"heapUsed":  54182232,
 	}
 
 	for k, v := range expected {
