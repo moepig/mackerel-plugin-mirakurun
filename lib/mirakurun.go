@@ -54,18 +54,12 @@ type ErrorCount struct {
 type TimerAccuracy struct {
 	M1 struct {
 		Avg *float64 `json:"avg"`
-		Min *float64 `json:"min"`
-		Max *float64 `json:"max"`
 	} `json:"m1"`
 	M5 struct {
 		Avg *float64 `json:"avg"`
-		Min *float64 `json:"min"`
-		Max *float64 `json:"max"`
 	} `json:"m5"`
 	M15 struct {
 		Avg *float64 `json:"avg"`
-		Min *float64 `json:"min"`
-		Max *float64 `json:"max"`
 	} `json:"m15"`
 }
 
