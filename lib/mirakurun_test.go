@@ -144,8 +144,12 @@ func TestFetchMetricsFail(t *testing.T) {
 	// return error against an invalid stats json
 	stub = "{}"
 
-	_, err := p.FetchMetrics()
-	if err == nil {
-		t.Errorf("FetchMetrics should return error: stub=%v", stub)
+	metrics, err := p.FetchMetrics()
+	if err != nil {
+		t.Errorf("Failed to FetchMetrics: %s", err)
+		return
+	}
+	if len(metrics) > 0 {
+		t.Errorf("length of metrics should be 0 : stub=%v", stub)
 	}
 }
