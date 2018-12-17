@@ -18,10 +18,15 @@ type MirakurunPlugin struct {
 
 type Status struct {
 	Process *Process `json:"process"`
+	Epg     *Epg     `json:"epg"`
 }
 
 type Process struct {
 	MemoryUsage *MemoryUsage `json:"memoryUsage"`
+}
+
+type Epg struct {
+	StoredEvents *int `json:"storedEvents"`
 }
 
 type MemoryUsage struct {
@@ -39,6 +44,13 @@ var graphdef = map[string]mp.Graphs{
 			{Name: "rss", Label: "RSS", Diff: false},
 			{Name: "heapTotal", Label: "Heap Total", Diff: false},
 			{Name: "heapUsed", Label: "Heap Used", Diff: false},
+		},
+	},
+	"epg": mp.Graphs{
+		Label: "Mirakurun Programs DB",
+		Unit:  "integer",
+		Metrics: []mp.Metrics{
+			{Name: "storedEvents", Label: "Stored Events", Diff: false},
 		},
 	},
 }
@@ -75,6 +87,11 @@ func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
 			stat["heapUsed"] = float64(*status.Process.MemoryUsage.HeapUsed)
 		}
 	}
+
+	if status.Epg != nil {
+		stat["storedEvents"] = float64(*status.Epg.StoredEvents)
+	}
+
 	return stat, nil
 }
 

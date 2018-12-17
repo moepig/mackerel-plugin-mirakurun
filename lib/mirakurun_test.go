@@ -118,9 +118,10 @@ func TestFetchMetrics(t *testing.T) {
 
 	// check metrics
 	expected := map[string]float64{
-		"rss":       171012096,
-		"heapTotal": 84508672,
-		"heapUsed":  54182232,
+		"rss":          171012096,
+		"heapTotal":    84508672,
+		"heapUsed":     54182232,
+		"storedEvents": 8416,
 	}
 
 	for k, v := range expected {
