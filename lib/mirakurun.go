@@ -17,14 +17,18 @@ type MirakurunPlugin struct {
 }
 
 type Status struct {
-	Process struct {
-		MemoryUsage struct {
-			Rss       int `json:"rss"`
-			HeapTotal int `json:"heapTotal"`
-			HeapUsed  int `json:"heapUsed"`
-			External  int `json:"external"`
-		} `json:"memoryUsage"`
-	} `json:"process"`
+	Process *Process `json:"process"`
+}
+
+type Process struct {
+	MemoryUsage *MemoryUsage `json:"memoryUsage"`
+}
+
+type MemoryUsage struct {
+	Rss       *int `json:"rss"`
+	HeapTotal *int `json:"heapTotal"`
+	HeapUsed  *int `json:"heapUsed"`
+	External  *int `json:"external"`
 }
 
 var graphdef = map[string]mp.Graphs{
@@ -64,10 +68,13 @@ func (m MirakurunPlugin) FetchMetrics() (map[string]float64, error) {
 	// mapping to metrics
 	stat := make(map[string]float64)
 
-	stat["rss"] = float64(status.Process.MemoryUsage.Rss)
-	stat["heapTotal"] = float64(status.Process.MemoryUsage.HeapTotal)
-	stat["heapUsed"] = float64(status.Process.MemoryUsage.HeapUsed)
-
+	if status.Process != nil {
+		if status.Process.MemoryUsage != nil {
+			stat["rss"] = float64(*status.Process.MemoryUsage.Rss)
+			stat["heapTotal"] = float64(*status.Process.MemoryUsage.HeapTotal)
+			stat["heapUsed"] = float64(*status.Process.MemoryUsage.HeapUsed)
+		}
+	}
 	return stat, nil
 }
 
