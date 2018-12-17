@@ -34,7 +34,7 @@ type MemoryUsage struct {
 var graphdef = map[string]mp.Graphs{
 	"memoryUsage": mp.Graphs{
 		Label: "Mirakurun Memory Usage",
-		Unit:  "integer",
+		Unit:  "bytes",
 		Metrics: []mp.Metrics{
 			{Name: "rss", Label: "RSS", Diff: false},
 			{Name: "heapTotal", Label: "Heap Total", Diff: false},
